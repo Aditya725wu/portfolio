@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { profile } from '../content'
-
-const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(
-  profile.mapQuery,
-)}&z=12&output=embed`
+import { useContent } from '../ContentContext'
 
 export default function ContactPanel() {
+  const { data } = useContent()
+  const { profile } = data
   const [status, setStatus] = useState('')
+  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(
+    profile.mapQuery,
+  )}&z=12&output=embed`
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -70,7 +71,7 @@ export default function ContactPanel() {
 
           <button
             type="submit"
-            className="mt-5 w-full rounded-[10px] bg-gold py-3 text-sm font-semibold text-sidebar"
+            className="mt-5 w-full rounded-[10px] bg-gold py-3 text-sm font-semibold text-sidebar btn-shine transition-transform duration-300 hover:scale-[1.01]"
           >
             Submit
           </button>

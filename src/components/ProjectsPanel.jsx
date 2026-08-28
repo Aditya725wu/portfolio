@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { projectFilters, projects } from '../content'
+import { useContent } from '../ContentContext'
 import { GithubIcon, projectIcons } from './Icons'
 
 const thumbGradients = [
@@ -9,6 +9,8 @@ const thumbGradients = [
 ]
 
 export default function ProjectsPanel() {
+  const { data } = useContent()
+  const { projectFilters, projects } = data
   const [filter, setFilter] = useState('All')
   const visible =
     filter === 'All'
@@ -28,10 +30,10 @@ export default function ProjectsPanel() {
               key={item}
               type="button"
               onClick={() => setFilter(item)}
-              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ${
                 isActive
                     ? 'bg-gold text-sidebar'
-                    : 'border border-line bg-inset text-muted hover:text-ink'
+                    : 'border border-line bg-inset text-muted hover:scale-[1.03] hover:text-ink'
               }`}
             >
               {item}
@@ -42,11 +44,12 @@ export default function ProjectsPanel() {
 
       <div className="mt-8 grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-5">
         {visible.map((project, index) => {
-          const Icon = projectIcons[project.category]
+          const Icon = projectIcons[project.category] || projectIcons.Web
           return (
             <article
               key={project.id}
-              className="overflow-hidden rounded-[14px] border border-line bg-inset transition-shadow duration-200 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(255,219,112,0.12)]"
+              className="card-lift stagger-child overflow-hidden rounded-[14px] border border-line bg-inset"
+              style={{ '--delay': `${index * 80}ms` }}
             >
               <div
                 className={`flex h-32 items-center justify-center bg-gradient-to-br text-white ${

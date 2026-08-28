@@ -203,3 +203,94 @@ export const projectIcons = {
   Cloud: CloudIcon,
   AI: SparkIcon,
 }
+
+export function CopyIcon(props) {
+  return (
+    <Svg className={props.className ?? 'h-3.5 w-3.5'}>
+      <rect x="9" y="9" width="11" height="11" rx="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </Svg>
+  )
+}
+
+export function CheckIcon(props) {
+  return (
+    <Svg className={props.className ?? 'h-3.5 w-3.5'}>
+      <path d="M5 12.5 9 16.5 19 7" />
+    </Svg>
+  )
+}
+
+export function GamepadIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M6 10h4M8 8v4M14.5 11h.01M17.5 9h.01" />
+      <path d="M7 17a5 5 0 0 1-4.6-7l1.2-3A3 3 0 0 1 6.4 5h11.2a3 3 0 0 1 2.8 2l1.2 3A5 5 0 0 1 17 17H7Z" />
+    </Svg>
+  )
+}
+
+export function LaptopIcon(props) {
+  return (
+    <Svg {...props}>
+      <rect x="4" y="5" width="16" height="11" rx="1.5" />
+      <path d="M2 18h20" />
+    </Svg>
+  )
+}
+
+export function MouseIcon(props) {
+  return (
+    <Svg {...props}>
+      <rect x="8" y="3" width="8" height="18" rx="4" />
+      <path d="M12 7v3" />
+    </Svg>
+  )
+}
+
+export function KeyboardIcon(props) {
+  return (
+    <Svg {...props}>
+      <rect x="2" y="7" width="20" height="12" rx="2" />
+      <path d="M6 11h.01M10 11h.01M14 11h.01M18 11h.01M8 15h8" />
+    </Svg>
+  )
+}
+
+export function HeadsetIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M4 13v-1a8 8 0 0 1 16 0v1" />
+      <rect x="2" y="13" width="5" height="7" rx="1.5" />
+      <rect x="17" y="13" width="5" height="7" rx="1.5" />
+    </Svg>
+  )
+}
+
+export function PhoneGadgetIcon(props) {
+  return (
+    <Svg {...props}>
+      <rect x="7" y="2" width="10" height="20" rx="2" />
+      <path d="M11 18h2" />
+    </Svg>
+  )
+}
+
+export function EarbudsIcon(props) {
+  return (
+    <Svg {...props}>
+      <circle cx="7" cy="8" r="3" />
+      <circle cx="17" cy="8" r="3" />
+      <path d="M7 11v5a3 3 0 0 0 3 3h1M17 11v5a3 3 0 0 1-3 3h-1" />
+    </Svg>
+  )
+}
+
+export const gadgetIcons = {
+  laptop: LaptopIcon,
+  mouse: MouseIcon,
+  keyboard: KeyboardIcon,
+  headset: HeadsetIcon,
+  phone: PhoneGadgetIcon,
+  earbuds: EarbudsIcon,
+}

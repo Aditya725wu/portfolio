@@ -1,11 +1,11 @@
-import { achievements, education, experience, skillGroups } from '../content'
 import { AwardIcon } from './Icons'
+import { useContent } from '../ContentContext'
 
 function Timeline({ items }) {
   return (
     <ol className="relative ml-2 border-l border-line pl-6">
-      {items.map((entry) => (
-        <li key={entry.id} className="relative pb-8 last:pb-0">
+      {items.map((entry, index) => (
+        <li key={entry.id} className="relative pb-8 last:pb-0 stagger-child" style={{ '--delay': `${index * 90}ms` }}>
           <span className="absolute -left-[29px] top-1.5 h-3 w-3 rounded-full border-2 border-gold bg-inset" />
           <p className="text-xs font-medium uppercase tracking-wider text-accent">
             {entry.dates}
@@ -26,6 +26,8 @@ function Timeline({ items }) {
 }
 
 export default function ResumePanel() {
+  const { data } = useContent()
+  const { achievements, education, experience, skillGroups } = data
   return (
     <div>
       <h2 className="font-heading text-3xl font-bold text-ink">Resume</h2>
@@ -55,7 +57,7 @@ export default function ResumePanel() {
               {achievements.map((item) => (
                 <li
                   key={item}
-                  className="flex gap-3 rounded-[12px] border border-line bg-inset p-3.5 text-sm leading-relaxed text-ink/80"
+                  className="card-lift flex gap-3 rounded-[12px] border border-line bg-inset p-3.5 text-sm leading-relaxed text-ink/80"
                 >
                   <span className="mt-0.5 shrink-0 text-accent">
                     <AwardIcon className="h-4 w-4" />
@@ -71,10 +73,11 @@ export default function ResumePanel() {
       <section className="mt-12">
         <h3 className="font-heading text-xl font-semibold text-ink">Skills</h3>
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {skillGroups.map((group) => (
+          {skillGroups.map((group, index) => (
             <article
               key={group.id}
-              className="rounded-[14px] border border-line bg-inset p-5"
+              className="card-lift stagger-child rounded-[14px] border border-line bg-inset p-5"
+              style={{ '--delay': `${index * 70}ms` }}
             >
               <div className="mb-3 flex items-center gap-2.5">
                 <span className="h-2 w-2 shrink-0 rounded-full bg-gold" />

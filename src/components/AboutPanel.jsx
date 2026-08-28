@@ -1,7 +1,9 @@
-import { companies, hobbies, profile, services } from '../content'
+import { useContent } from '../ContentContext'
 import { serviceIcons } from './Icons'
 
 export default function AboutPanel() {
+  const { data } = useContent()
+  const { companies, hobbies, profile, services } = data
   return (
     <div>
       <p className="text-sm font-medium tracking-wide text-accent">👋 Hello!</p>
@@ -20,12 +22,13 @@ export default function AboutPanel() {
         What I&apos;m Doing
       </h3>
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {services.map((service) => {
+        {services.map((service, index) => {
           const Icon = serviceIcons[service.id]
           return (
             <article
               key={service.id}
-              className="rounded-[14px] border border-line bg-inset p-5"
+              className="card-lift stagger-child rounded-[14px] border border-line bg-inset p-5"
+              style={{ '--delay': `${index * 80}ms` }}
             >
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-[10px] bg-accent-soft text-accent">
                 <Icon className="h-5 w-5" />
@@ -48,7 +51,7 @@ export default function AboutPanel() {
         {companies.map((name) => (
           <span
             key={name}
-            className="rounded-full border border-line bg-inset px-4 py-2 text-sm font-medium text-ink/80"
+            className="rounded-full border border-line bg-inset px-4 py-2 text-sm font-medium text-ink/80 transition-colors duration-300 hover:border-gold/40 hover:text-gold"
           >
             {name}
           </span>
@@ -62,7 +65,7 @@ export default function AboutPanel() {
         {hobbies.map((name) => (
           <span
             key={name}
-            className="rounded-full border border-line bg-inset px-4 py-2 text-sm font-medium text-ink/80"
+            className="rounded-full border border-line bg-inset px-4 py-2 text-sm font-medium text-ink/80 transition-colors duration-300 hover:border-gold/40 hover:text-gold"
           >
             {name}
           </span>
