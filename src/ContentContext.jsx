@@ -7,13 +7,31 @@ const SESSION_KEY = 'aditya-portfolio-admin'
 
 const ContentContext = createContext(null)
 
+function ensureCodexNav(nav) {
+  const list = Array.isArray(nav) ? [...nav] : []
+  if (!list.some((item) => item.id === 'brain')) {
+    const notesAt = list.findIndex((item) => item.id === 'notes')
+    const entry = { id: 'brain', label: 'Second Brain' }
+    if (notesAt >= 0) list.splice(notesAt + 1, 0, entry)
+    else list.push(entry)
+  }
+  return list
+}
+
 function loadContent() {
+  const defaults = cloneDefaults()
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return cloneDefaults()
-    return { ...cloneDefaults(), ...JSON.parse(raw) }
+    if (!raw) return defaults
+    const saved = JSON.parse(raw)
+    return {
+      ...defaults,
+      ...saved,
+      secondBrain: saved.secondBrain ?? defaults.secondBrain,
+      codexNav: ensureCodexNav(saved.codexNav ?? defaults.codexNav),
+    }
   } catch {
-    return cloneDefaults()
+    return defaults
   }
 }
 

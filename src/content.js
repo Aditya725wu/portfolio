@@ -255,6 +255,7 @@ export const codexNav = [
   { id: 'design', label: 'System design' },
   { id: 'assets', label: 'Assets' },
   { id: 'notes', label: 'Notes' },
+  { id: 'brain', label: 'Second Brain' },
   { id: 'pulse', label: 'Off hours' },
 ]
 
@@ -335,6 +336,62 @@ export const longNotes = [
   },
 ]
 
+/** @typedef {{ id: string, title: string, tags: string[], body: string, related: { kind: string, label: string, targetId: string }[] }} BrainConcept */
+
+/** @type {BrainConcept[]} */
+export const secondBrain = [
+  {
+    id: 'cap-theorem',
+    title: 'CAP Theorem',
+    tags: ['system-design', 'databases'],
+    body: 'If the network splits, I do not get a perfect world. I pick two: stay up, stay consistent, or keep talking across the split. For the AWS dashboard I would rather serve a slightly stale health number than freeze the whole page.',
+    related: [
+      { kind: 'see also', label: 'Consistency Models', targetId: 'consistency-models' },
+      { kind: 'used in', label: 'Cloud Service Management', targetId: 'indexes' },
+    ],
+  },
+  {
+    id: 'hash-maps',
+    title: 'Hash maps before clever tricks',
+    tags: ['dsa'],
+    body: 'Most of my LeetCode misses are “I should have counted this.” Frequency map first, then two pointers. If I cannot explain the key in one sentence, I am not ready to code it.',
+    related: [
+      { kind: 'see also', label: 'Indexes', targetId: 'indexes' },
+      { kind: 'see also', label: 'REST is a contract', targetId: 'rest-contract' },
+    ],
+  },
+  {
+    id: 'consistency-models',
+    title: 'Consistency Models',
+    tags: ['databases', 'system-design'],
+    body: 'Strong consistency means I wait until everyone agrees. Eventual means I show something now and fix it later. I write which one I picked in the note so future-me does not pretend it was “just Mongo being Mongo.”',
+    related: [
+      { kind: 'see also', label: 'CAP Theorem', targetId: 'cap-theorem' },
+      { kind: 'used in', label: 'Bookstore MySQL writes', targetId: 'indexes' },
+    ],
+  },
+  {
+    id: 'indexes',
+    title: 'Indexes are not free',
+    tags: ['databases', 'tools'],
+    body: 'An index is a cheat sheet for the query I already know I will run. It speeds reads and taxes writes. If the bookstore search is slow, I check the WHERE column before I rewrite Java.',
+    related: [
+      { kind: 'see also', label: 'Hash maps before clever tricks', targetId: 'hash-maps' },
+      { kind: 'used in', label: 'Book Store Management', targetId: 'rest-contract' },
+    ],
+  },
+  {
+    id: 'rest-contract',
+    title: 'REST is a contract',
+    tags: ['networking', 'tools'],
+    body: 'A path, a verb, a status code. That is the whole conversation. Postman does not lie — if 200 returns an error string, I broke the contract, not the UI. Same rule I used at Eduveda.',
+    related: [
+      { kind: 'see also', label: 'CAP Theorem', targetId: 'cap-theorem' },
+      { kind: 'see also', label: 'Consistency Models', targetId: 'consistency-models' },
+    ],
+  },
+]
+
 export const pulse = {
   values: ['Ship small, finish it', 'Write it down', 'Compete, then review', 'Stay curious about hardware + cloud'],
   sports: 'Cricket — watch, play, and talk about it the same way I talk about ranked games.',
@@ -367,6 +424,7 @@ export function cloneDefaults() {
       designNotes,
       workAssets,
       longNotes,
+      secondBrain,
       pulse,
     }),
   )

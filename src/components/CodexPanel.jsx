@@ -165,7 +165,7 @@ function Assets() {
           const Icon = gadgetIcons[item.kind]
           return (
             <article key={item.id} className="rounded-[14px] border border-line bg-inset p-4">
-              <Icon className="h-5 w-5 text-gold" />
+              {Icon ? <Icon className="h-5 w-5 text-gold" /> : null}
               <h4 className="mt-2 font-heading text-sm font-semibold text-ink">{item.name}</h4>
               <p className="mt-1 text-xs text-muted">{item.detail}</p>
             </article>
@@ -188,6 +188,88 @@ function Notes() {
           <article key={note.title} className="rounded-[14px] border border-line bg-inset p-5">
             <h3 className="font-heading text-base font-semibold text-ink">{note.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-ink/75">{note.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function SecondBrain() {
+  const { data } = useContent()
+  const concepts = data.secondBrain || []
+  const [filter, setFilter] = useState('all')
+  const tags = [...new Set(concepts.flatMap((item) => item.tags))].sort()
+
+  const visible =
+    filter === 'all' ? concepts : concepts.filter((item) => item.tags.includes(filter))
+
+  function goRelated(item) {
+    if (!item.targetId) return
+    const target = concepts.find((c) => c.id === item.targetId)
+    if (target) {
+      const match = target.tags.includes(filter) || filter === 'all'
+      if (!match) setFilter('all')
+      window.requestAnimationFrame(() => {
+        document.getElementById(`brain-${item.targetId}`)?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+      })
+    } else {
+      setFilter(item.label)
+    }
+  }
+
+  return (
+    <div className="animate-fade-in">
+      <h2 className="font-heading text-2xl font-bold text-ink">Second Brain</h2>
+      <p className="mt-2 text-sm text-muted">
+        Concepts I keep explaining to myself. Filter by tag. Related links jump to another card.
+      </p>
+
+      <div className="mt-6 flex flex-wrap gap-2">
+        {['all', ...tags].map((tag) => {
+          const isActive = filter === tag
+          return (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => setFilter(tag)}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors ${
+                isActive
+                  ? 'bg-sidebar text-gold'
+                  : 'border border-line bg-inset text-muted hover:text-ink'
+              }`}
+            >
+              {tag === 'all' ? 'All' : `#${tag}`}
+            </button>
+          )
+        })}
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-4 nav:grid-cols-2">
+        {visible.map((concept) => (
+          <article
+            id={`brain-${concept.id}`}
+            key={concept.id}
+            className="flex flex-col rounded-[14px] border border-line bg-inset p-5"
+          >
+            <h3 className="font-heading text-base font-semibold text-ink">{concept.title}</h3>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/75">{concept.body}</p>
+            <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted">
+              <span className="font-medium text-gold">Related</span>
+              {(concept.related || []).map((link) => (
+                <button
+                  key={`${link.kind}-${link.label}`}
+                  type="button"
+                  onClick={() => goRelated(link)}
+                  className="text-left text-muted hover:text-gold"
+                >
+                  → {link.kind}: {link.label}
+                </button>
+              ))}
+            </div>
           </article>
         ))}
       </div>
@@ -240,6 +322,7 @@ const views = {
   design: Design,
   assets: Assets,
   notes: Notes,
+  brain: SecondBrain,
   pulse: Pulse,
 }
 
@@ -247,7 +330,7 @@ export default function CodexPanel() {
   const { data } = useContent()
   const { codexNav } = data
   const [section, setSection] = useState('overview')
-  const View = views[section]
+  const View = views[section] || Overview
 
   return (
     <div className="-mx-5 -mb-8 flex min-h-[70vh] flex-col border-t border-line sm:-mx-8 nav:-mx-10 nav:-mb-10 nav:flex-row">

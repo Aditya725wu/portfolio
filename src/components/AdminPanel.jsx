@@ -170,7 +170,8 @@ export default function AdminPanel({ onClose }) {
 
   function insert(key, item, atStart = true) {
     setDraft((prev) => {
-      const list = atStart ? [item, ...prev[key]] : [...prev[key], item]
+      const current = Array.isArray(prev[key]) ? prev[key] : []
+      const list = atStart ? [item, ...current] : [...current, item]
       return { ...prev, [key]: list }
     })
     setOpenId(item.id || item.title || item.topic || item.name)
@@ -691,6 +692,70 @@ export default function AdminPanel({ onClose }) {
                   >
                     <Field label="Title" value={item.title} onChange={(v) => patch(`longNotes.${index}.title`, v)} />
                     <Field textarea label="Body" value={item.body} onChange={(v) => patch(`longNotes.${index}.body`, v)} />
+                  </EditorCard>
+                ))}
+
+                <AddButton
+                  onClick={() =>
+                    insert('secondBrain', {
+                      id: uid('br'),
+                      title: 'New concept',
+                      tags: ['tools'],
+                      body: 'Explain it to yourself in two or three sentences.',
+                      related: [{ kind: 'see also', label: '', targetId: '' }],
+                    })
+                  }
+                >
+                  Add Second Brain concept
+                </AddButton>
+                {(draft.secondBrain || []).map((item, index) => (
+                  <EditorCard
+                    key={item.id}
+                    title={item.title}
+                    subtitle={(item.tags || []).map((t) => `#${t}`).join(' ')}
+                    startOpen={openId === item.id}
+                    onRemove={() =>
+                      patch(
+                        'secondBrain',
+                        draft.secondBrain.filter((_, i) => i !== index),
+                      )
+                    }
+                  >
+                    <Field label="Title" value={item.title} onChange={(v) => patch(`secondBrain.${index}.title`, v)} />
+                    <ChipEditor
+                      label="Tags"
+                      items={item.tags || []}
+                      placeholder="dsa"
+                      onChange={(items) => patch(`secondBrain.${index}.tags`, items)}
+                    />
+                    <Field
+                      textarea
+                      label="Body"
+                      value={item.body}
+                      onChange={(v) => patch(`secondBrain.${index}.body`, v)}
+                    />
+                    <Field
+                      label="Related (one per line: kind | label | target-id)"
+                      textarea
+                      value={(item.related || [])
+                        .map((r) => `${r.kind} | ${r.label} | ${r.targetId || ''}`)
+                        .join('\n')}
+                      onChange={(v) =>
+                        patch(
+                          `secondBrain.${index}.related`,
+                          v
+                            .split('\n')
+                            .map((line) => line.trim())
+                            .filter(Boolean)
+                            .map((line) => {
+                              const [kind = 'see also', label = '', targetId = ''] = line
+                                .split('|')
+                                .map((s) => s.trim())
+                              return { kind, label, targetId }
+                            }),
+                        )
+                      }
+                    />
                   </EditorCard>
                 ))}
 
